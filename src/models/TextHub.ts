@@ -2,24 +2,41 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const texthubSchema = new Schema({
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: "users",
+const conversationSchema = new Schema({
+  sender: {
+    type: String,
+    enum: ["system", "user"],
     required: true,
   },
-  content: {
+  message: {
     type: String,
     required: true,
   },
-  type: {
+  model: {
     type: String,
-    default: "text",
+    required: false,
   },
   tokens: {
     type: Number,
     required: true,
   },
+  timestamp: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+const texthubSchema = new Schema({
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "users",
+    required: true  ,
+  },
+  type: {
+    type: String,
+    default: "text",
+  },
+  conversations: [conversationSchema],
   created_at: {
     type: Date,
     default: Date.now,
