@@ -18,12 +18,12 @@ import explorer from "./routes/aiExplorer";
 const app = express();
 
 // Cors
-app.use();
+app.use(cors());
 
 // Body Parser
 app.use(express.json());
 
-// Specify the port number for the server
+// Specify the port number for the serve  r
 const port = process.env.PORT || 3000;
 
 // Connect to MongoDB
