@@ -13,6 +13,7 @@ import model from "./routes/models";
 import service from "./routes/service";
 import organization from "./routes/organization";
 import explorer from "./routes/aiExplorer";
+import { startDiscordBot } from "./scripts/discord-bot";
 
 // Create an Express application
 const app = express();
@@ -39,6 +40,10 @@ app.use("/api/models", model);
 app.use("/api/service", service);
 app.use("/api/orgs", organization);
 app.use("/api/explorer", explorer);
+
+
+//Start discord bot
+startDiscordBot().then(data=>console.log("Discord bot started")).catch(err=>console.log("Error in starting discord bot"));
 
 // Define a route for the root path ('/')
 app.get("/", (req: Request, res: Response) => {
