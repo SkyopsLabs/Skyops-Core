@@ -14,6 +14,10 @@ import service from "./routes/service";
 import organization from "./routes/organization";
 import explorer from "./routes/aiExplorer";
 import { startDiscordBot } from "./scripts/discord-bot";
+import {
+  initializeClaimedFieldsReset,
+  initializeUserActivityCheck,
+} from "./scripts/cron";
 
 // Create an Express application
 const app = express();
@@ -41,9 +45,12 @@ app.use("/api/service", service);
 app.use("/api/orgs", organization);
 app.use("/api/explorer", explorer);
 
+const resetTask = initializeClaimedFieldsReset(true);
 
 //Start discord bot
-startDiscordBot().then(data=>console.log("Discord bot started")).catch(err=>console.log("Error in starting discord bot"));
+startDiscordBot()
+  .then((data) => console.log("Discord bot started"))
+  .catch((err) => console.log("Error in starting discord bot"));
 
 // Define a route for the root path ('/')
 app.get("/", (req: Request, res: Response) => {
