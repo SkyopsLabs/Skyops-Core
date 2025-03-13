@@ -4,6 +4,7 @@ import { User } from "../models/User";
 import { jwtSecret } from "../config/passport";
 import { Organization } from "../models/Organization";
 import { Model } from "../models/Model";
+import crypto from "crypto";
 
 export const getUser = async (req: any, res: any) => {
   const userId = req.user.id;
@@ -30,11 +31,22 @@ export const authUser = async (req: Request, res: any) => {
       .status(400)
       .json({ msg: "Bad request: wallet address was not sent" });
 
+  const generateRefCode = () => {
+    return crypto
+      .randomBytes(3)
+      .toString("hex")
+      .toUpperCase()
+      .replace(/[0-9]/g, (char) => {
+        return String.fromCharCode("A".charCodeAt(0) + parseInt(char, 10));
+      });
+  };
+
   try {
     const user = await User.findOne({ wallet });
     if (!user) {
       // Register
-      const newUser = await User.create({ wallet });
+      const refCode = generateRefCode();
+      const newUser = await User.create({ wallet, code: refCode });
 
       await Organization.create({ owner: newUser._id });
 

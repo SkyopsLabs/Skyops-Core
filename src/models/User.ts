@@ -13,6 +13,10 @@ const userSchema = new Schema({
     type: String,
     required: false,
   },
+  code: {
+    type: String,
+    required: true,
+  },
   gmail: {
     type: String,
     required: false,
