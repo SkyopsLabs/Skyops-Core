@@ -31,21 +31,30 @@ export const authUser = async (req: Request, res: any) => {
       .status(400)
       .json({ msg: "Bad request: wallet address was not sent" });
 
-  const generateRefCode = () => {
-    return crypto
-      .randomBytes(3)
-      .toString("hex")
-      .toUpperCase()
-      .replace(/[0-9]/g, (char) => {
-        return String.fromCharCode("A".charCodeAt(0) + parseInt(char, 10));
-      });
+  const generateRefCode = async () => {
+    let refCode;
+    let existingUser;
+
+    do {
+      refCode = crypto
+        .randomBytes(3)
+        .toString("hex")
+        .toUpperCase()
+        .replace(/[0-9]/g, (char) => {
+          return String.fromCharCode("A".charCodeAt(0) + parseInt(char, 10));
+        });
+
+      existingUser = await User.findOne({ code: refCode });
+    } while (existingUser);
+
+    return refCode;
   };
 
   try {
     const user = await User.findOne({ wallet });
     if (!user) {
       // Register
-      const refCode = generateRefCode();
+      const refCode = await generateRefCode();
       const newUser = await User.create({ wallet, code: refCode });
 
       await Organization.create({ owner: newUser._id });
