@@ -9,7 +9,7 @@ import cron from "node-cron";
 export const initializeClaimedFieldsReset = (testMode = false) => {
   const cronSchedule = testMode ? "0 */3 * * *" : "0 0 * * *";
 
-  const task = cron.schedule(cronSchedule, async () => {
+  const task1 = cron.schedule(cronSchedule, async () => {
     try {
       // Reset all users' claimed fields
       const result = await User.updateMany(
@@ -35,15 +35,7 @@ export const initializeClaimedFieldsReset = (testMode = false) => {
     }`
   );
 
-  return task;
-};
-
-/**
- * Cron job to reward users who have sent messages in Discord/Telegram within the day
- * Runs every 15 minutes
- */
-export const initializeUserActivityCheck = () => {
-  const task = cron.schedule("*/15 * * * *", async () => {
+  const task2 = cron.schedule("*/15 * * * *", async () => {
     try {
       const now = new Date();
       const startOfDay = new Date(now.setHours(0, 0, 0, 0));
@@ -89,12 +81,10 @@ export const initializeUserActivityCheck = () => {
 
   console.log("User activity check initialized (every 15 minutes)");
 
-  return task;
+  return { task1, task2 };
 };
 
-// Usage in your server startup file:
-// import { initializeClaimedFieldsReset, initializeUserActivityCheck } from './path/to/this/file';
-
-// Start both cron jobs
-initializeClaimedFieldsReset(false); // Resets at midnight or every 3 hours in test mode
-initializeUserActivityCheck(); // Checks every 15 minutes
+/**
+ * Cron job to reward users who have sent messages in Discord/Telegram within the day
+ * Runs every 15 minutes
+ */

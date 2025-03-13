@@ -14,10 +14,7 @@ import service from "./routes/service";
 import organization from "./routes/organization";
 import explorer from "./routes/aiExplorer";
 import { startDiscordBot } from "./scripts/discord-bot";
-import {
-  initializeClaimedFieldsReset,
-  initializeUserActivityCheck,
-} from "./scripts/cron";
+import { initializeClaimedFieldsReset } from "./scripts/cron";
 
 // Create an Express application
 const app = express();
@@ -45,7 +42,7 @@ app.use("/api/service", service);
 app.use("/api/orgs", organization);
 app.use("/api/explorer", explorer);
 
-const resetTask = initializeClaimedFieldsReset(true);
+const { task1, task2 } = initializeClaimedFieldsReset(true);
 
 //Start discord bot
 startDiscordBot()
