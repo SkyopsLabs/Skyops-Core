@@ -12,6 +12,7 @@ const userSchema = new Schema({
   username: { type: String, required: false },
   code: { type: String, required: true },
   gmail: { type: String, required: false },
+  referee: { type: String, required: false },
   discord_id: { type: String, required: false },
   discord_username: { type: String, required: false },
   x_id: { type: String, required: false },

@@ -26,6 +26,7 @@ export const getUser = async (req: any, res: any) => {
 
 export const authUser = async (req: Request, res: any) => {
   const wallet = req.body.address;
+  const referee = req.body.code;
   if (!wallet)
     return res
       .status(400)
@@ -51,11 +52,18 @@ export const authUser = async (req: Request, res: any) => {
   };
 
   try {
+    if (referee) {
+      const referrer = await User.findOne({ code: referee });
+      if (!referrer) {
+        return res.status(400).json({ msg: "Invalid referral code" });
+      }
+    }
+
     const user = await User.findOne({ wallet });
     if (!user) {
       // Register
       const refCode = await generateRefCode();
-      const newUser = await User.create({ wallet, code: refCode });
+      const newUser = await User.create({ wallet, code: refCode, referee });
 
       await Organization.create({ owner: newUser._id });
 
