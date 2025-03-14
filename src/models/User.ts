@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const pointsHistorySchema = new Schema({
-  date: { type: Date, required: true },
+  date: { type: String, required: true },
   type: { type: String, required: true }, // e.g., "earned", "spent", "bonus"
   points: { type: Number, required: true },
 });

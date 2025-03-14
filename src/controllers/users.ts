@@ -63,7 +63,20 @@ export const authUser = async (req: Request, res: any) => {
     if (!user) {
       // Register
       const refCode = await generateRefCode();
+      const pointsEntry = {
+        date: new Date().toLocaleDateString("de-DE"),
+        type: "Referral",
+        points: 10,
+      };
       const newUser = await User.create({ wallet, code: refCode, referee });
+      if (referee) {
+        const referrer = await User.findOne({ code: referee });
+
+        await User.updateOne(
+          { wallet: referrer?.wallet },
+          { $inc: { points: 10 }, $push: { pointsHistory: pointsEntry } }
+        );
+      }
 
       await Organization.create({ owner: newUser._id });
 
