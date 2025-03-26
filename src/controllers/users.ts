@@ -162,3 +162,37 @@ export const topUpTokens = async (req: any, res: any) => {
     return res.status(500).json({ msg: "Internal server error" });
   }
 };
+
+export const addPoints = async (req: any, res: any) => {
+  const userId = req.user.id;
+
+  const { points } = req.body;
+
+  if (!userId || !points) {
+    return res
+      .status(400)
+      .json({ msg: "Bad request: userId and points are required" });
+  }
+
+  try {
+    let user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    // Optionally, add an entry to the points history
+    const pointsEntry = {
+      date: new Date().toLocaleDateString("de-DE"),
+      type: "Minning",
+      points,
+    };
+    user.points = user.points + points;
+    user.pointsHistory.push(pointsEntry);
+    await user.save();
+
+    return res.status(200).json({ msg: "Points added successfully", user });
+  } catch (error) {
+    console.error("Error in adding points: ", error);
+    return res.status(500).json({ msg: "Internal server error" });
+  }
+};
