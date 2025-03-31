@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const conversationSchema = new Schema({
   sender: {
     type: String,
-    enum: ["system", "user"],
+    enum: ["assistant", "user"],
     required: true,
   },
   message: {
@@ -20,7 +20,7 @@ const conversationSchema = new Schema({
     type: Number,
     required: true,
   },
-  timestamp: {
+  created_at: {
     type: Date,
     default: Date.now,
   },
@@ -30,7 +30,7 @@ const texthubSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
     ref: "users",
-    required: true  ,
+    required: true,
   },
   type: {
     type: String,

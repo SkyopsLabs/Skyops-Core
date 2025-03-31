@@ -30,17 +30,26 @@ export const startDiscordBot = async () => {
 
     console.log(message);
 
-    await User.updateOne(
-      { discord_id: message.author.id },
-      {
-        $set: {
-          lastDiscordMessage: new Date(),
-        },
-      },
-      { upsert: true }
-    );
-
-    console.log(`📩 Message received from ${message.author.username}`);
+    // Check if the user has a wallet address linked to their discord_id
+    const user = await User.findOne({
+      discord_id: message.author.id,
+      wallet: { $exists: true },
+    });
+    if (user) {
+      await User.updateOne(
+        { discord_id: message.author.id },
+        {
+          $set: {
+            lastDiscordMessage: new Date(),
+          },
+        }
+      );
+      console.log(`📩 Message received from ${message.author.username}`);
+    } else {
+      console.log(
+        `⚠️ No wallet address linked for Discord ID: ${message.author.id}`
+      );
+    }
   });
 
   client.login(DISCORD_BOT_TOKEN);
