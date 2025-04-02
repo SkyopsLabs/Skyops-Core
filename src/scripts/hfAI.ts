@@ -3,14 +3,21 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // Hf Modules
-import { HfInference } from "@huggingface/inference";
+import { InferenceClient } from "@huggingface/inference";
+import OpenAI from "openai";
+
+const api_key = process.env.DEEPSEEK_API_KEY;
+
+const openai = new OpenAI({
+  baseURL: "https://api.deepseek.com",
+  apiKey: api_key,
+});
 
 const hf_key = process.env.HUGGINGFACE_API_KEY;
-const inference = new HfInference(hf_key);
-const api_key = process.env.DEEPSEEK_API_KEY;
+const hf = new InferenceClient(hf_key);
 const data = {
   // model: "google/gemma-2-9b-it",
-  model: "deepseek-ai/DeepSeek-V2-Chat",
+  model: "deepseek-chat",
   messages: [
     {
       role: "system",
@@ -28,31 +35,39 @@ const data = {
 };
 (async () => {
   try {
-    const out = await inference.chatCompletion({
-      // model: "google/gemma-2-9b-it",
-      // model: "deepseek-ai/DeepSeek-V2-Chat",
-      model: "meta-llama/Llama-3.1-8B-Instruct",
+    // const chat = await hf.chatCompletion({
+    //   // model: "google/gemma-2-9b-it",
+    //   // model: "deepseek-ai/DeepSeek-V2-Chat",
+    //   model: "meta-llama/Llama-3.1-8B-Instruct",
+    //   messages: [
+    //     {
+    //       role: "user",
+    //       content: "What does inference mean?",
+    //     },
+    //   ],
+    //   max_tokens: 512,
+    //   temperature: 0.5,
+    // });
+    const chat = await openai.chat.completions.create({
       messages: [
         {
+          role: "system",
+          content: "You are a helpful assistant.",
+        },
+        {
           role: "user",
-          content: "What does inference mean?",
+          content: "What does Osas mean?",
         },
       ],
-      max_tokens: 512,
-      temperature: 0.5,
+      model: "deepseek-chat",
     });
-    // const out = await fetch("https://api.deepseek.com/chat/completions", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${api_key}`,
-    //   },
-    //   body: JSON.stringify(data),
-    // });
-    // const res = await out.json();
-    console.log({ out });
-    // console.log(res);
-    console.log(out.choices[0]);
+
+    const obj = {
+      tokens: chat.usage?.total_tokens,
+      content: chat.choices[0].message.content,
+    };
+    console.log({ obj });
+    // console.log(chat.choices[0]);
   } catch (error) {
     console.log(error);
   }

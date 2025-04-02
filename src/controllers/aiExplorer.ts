@@ -27,12 +27,13 @@ export const generateAiText = async (req: any, res: any) => {
     // Get or create a conversation ID
     const conversationId = await createConversation(userId);
 
+    type AiResponse = { tokens: number; content: string };
     // Generate AI text
-    const aiResponse = await generateAiTextUtil(
+    const aiResponse = (await generateAiTextUtil(
       model.name,
       prompt,
       systemPrompt
-    );
+    )) as AiResponse;
     if (!aiResponse)
       return res.status(500).json({ msg: "Internal server error" });
 
