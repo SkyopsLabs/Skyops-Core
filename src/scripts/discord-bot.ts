@@ -40,7 +40,7 @@ export const startDiscordBot = async () => {
         { discord_id: message.author.id },
         {
           $set: {
-            lastDiscordMessage: new Date(),
+            lastDiscordMessage: Date.now(),
           },
         }
       );
