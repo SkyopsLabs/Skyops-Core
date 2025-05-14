@@ -7,6 +7,12 @@ const pointsHistorySchema = new Schema({
   type: { type: String, required: true }, // e.g., "earned", "spent", "bonus"
   points: { type: Number, required: true },
 });
+const postSchema = new Schema({
+  link: { type: String, required: true },
+  type: { type: String, required: true },
+  claimed: { type: Boolean, default: false },
+  points: { type: Number, default: 0 },
+});
 
 const userSchema = new Schema({
   username: { type: String, required: false },
@@ -27,6 +33,7 @@ const userSchema = new Schema({
   claimedDiscord: { type: Boolean, default: false },
   claimedTelegram: { type: Boolean, default: false },
   tokens: { type: Number, default: 0 },
+  posts: { type: [postSchema], default: [] },
   pointsHistory: { type: [pointsHistorySchema], default: [] },
   created_at: { type: Date, default: Date.now },
   updated_at: { type: Date, default: Date.now },
