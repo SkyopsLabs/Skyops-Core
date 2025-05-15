@@ -55,17 +55,35 @@ export const initializeClaimedFieldsReset = (testMode = false) => {
 
       // Update Discord users
       for (const user of discordUsers) {
+        const pointsEntry = {
+          date: new Date().toLocaleDateString("de-DE"),
+          type: "Discord Message",
+          points: 25,
+        };
         await User.updateOne(
           { _id: user._id },
-          { $inc: { points: 10 }, $set: { claimedDiscord: true } }
+          {
+            $inc: { points: 25 },
+            $set: { claimedDiscord: true },
+            $push: { pointsHistory: pointsEntry },
+          }
         );
       }
 
       // Update Telegram users
       for (const user of telegramUsers) {
+        const pointsEntry = {
+          date: new Date().toLocaleDateString("de-DE"),
+          type: "Telegram Message",
+          points: 25,
+        };
         await User.updateOne(
           { _id: user._id },
-          { $inc: { points: 10 }, $set: { claimedTelegram: true } }
+          {
+            $inc: { points: 25 },
+            $set: { claimedTelegram: true },
+            $push: { pointsHistory: pointsEntry },
+          }
         );
       }
 
