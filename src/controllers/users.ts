@@ -74,7 +74,7 @@ export const authUser = async (req: Request, res: any) => {
 
         await User.updateOne(
           { wallet: referrer?.wallet },
-          { $inc: { points: 10 }, $push: { pointsHistory: pointsEntry } }
+          { $inc: { points: 0 }, $push: { pointsHistory: pointsEntry } }
         );
       }
 
