@@ -42,7 +42,7 @@ app.use("/api/service", service);
 app.use("/api/orgs", organization);
 app.use("/api/explorer", explorer);
 
-const { task1, task2 } = initializeClaimedFieldsReset(false);
+// const { task1, task2 } = initializeClaimedFieldsReset(false);
 
 //Start discord bot
 startDiscordBot()
