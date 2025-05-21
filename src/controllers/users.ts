@@ -78,7 +78,7 @@ export const authUser = async (req: Request, res: any) => {
       //   );
       // }
 
-      await Organization.create({ owner: newUser._id });
+      // await Organization.create({ owner: newUser._id });
 
       const payload = {
         user: {
