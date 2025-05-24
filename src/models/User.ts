@@ -27,6 +27,7 @@ const userSchema = new Schema({
   tg_username: { type: String, required: false },
   lastDiscordMessage: { type: Number, required: false },
   lastTelegramMessage: { type: Number, required: false },
+  lastMinedDate: { type: Date, required: false },
   wallet: { type: String, required: true },
   balance: { type: Number, default: 0 },
   points: { type: Number, default: 0 },
