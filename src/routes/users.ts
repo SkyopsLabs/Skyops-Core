@@ -10,6 +10,7 @@ import {
   updateProfile,
   topUpTokens,
   addPoints,
+  getConvos,
 } from "../controllers/users";
 
 const router = express.Router();
@@ -19,5 +20,6 @@ router.post("/", authUser);
 router.post("/update-profile", auth, updateProfile);
 router.post("/top-up", auth, topUpTokens);
 router.post("/points", auth, addPoints);
+router.post("/chats", auth, getConvos);
 
 export default router;

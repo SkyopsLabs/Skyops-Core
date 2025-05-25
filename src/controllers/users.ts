@@ -6,6 +6,7 @@ import { Organization } from "../models/Organization";
 import { Model } from "../models/Model";
 import crypto from "crypto";
 import { wallets } from "../utils/constants";
+import { TextHub } from "../models/TextHub";
 
 export const getUser = async (req: any, res: any) => {
   const userId = req.user.id;
@@ -208,6 +209,29 @@ export const addPoints = async (req: any, res: any) => {
     return res.status(200).json({ msg: "Points added successfully", user });
   } catch (error) {
     console.error("Error in adding points: ", error);
+    return res.status(500).json({ msg: "Internal server error" });
+  }
+};
+
+export const getConvos = async (req: any, res: any) => {
+  const userId = req.user.id;
+  if (!userId) return res.status(401).json({ msg: "Authorization Failed" });
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ msg: "User not found" });
+
+    // Check if the user already has a conversation array
+    const existingConversation = await TextHub.findOne({ user: user._id });
+
+    if (!existingConversation) {
+      return []; // Return an empty array if no conversations exist
+    } else {
+      // Return the existing conversation ID
+      return res.status(200).json(existingConversation.conversations);
+    }
+  } catch (error) {
+    console.error("Error in generating Ai Text: ", error);
     return res.status(500).json({ msg: "Internal server error" });
   }
 };
