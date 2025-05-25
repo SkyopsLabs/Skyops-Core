@@ -225,7 +225,7 @@ export const getConvos = async (req: any, res: any) => {
     const existingConversation = await TextHub.findOne({ user: user._id });
 
     if (!existingConversation) {
-      return []; // Return an empty array if no conversations exist
+      return res.status(200).json([]);
     } else {
       // Return the existing conversation ID
       return res.status(200).json(existingConversation.conversations);
