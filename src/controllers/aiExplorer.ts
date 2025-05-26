@@ -12,6 +12,8 @@ export const generateAiText = async (req: any, res: any) => {
   const prompt = req.body.prompt;
   const systemPrompt = req.body.systemPrompt;
   const modelId = req.body.model;
+  const temperature = req.body.temperature;
+  const maxTokens = req.body.maxTokens;
   if (!prompt || !modelId)
     return res
       .status(400)
@@ -32,7 +34,9 @@ export const generateAiText = async (req: any, res: any) => {
     const aiResponse = (await generateAiTextUtil(
       model.name,
       prompt,
-      systemPrompt
+      systemPrompt,
+      temperature,
+      maxTokens
     )) as AiResponse;
     if (!aiResponse)
       return res.status(500).json({ msg: "Internal server error" });

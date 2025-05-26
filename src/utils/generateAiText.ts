@@ -17,7 +17,9 @@ const openai = new OpenAI({
 export const generateAiTextUtil = async (
   model: string,
   prompt: string,
-  systemPrompt: string
+  systemPrompt: string,
+  temperature: number,
+  maxTokens: number
 ) => {
   try {
     const chat = !model.includes("deep")
@@ -50,6 +52,8 @@ export const generateAiTextUtil = async (
             },
           ],
           model: "deepseek-chat",
+          temperature: Number(temperature),
+          max_tokens: Number(maxTokens),
         });
 
     const obj = {
