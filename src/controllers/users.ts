@@ -177,11 +177,6 @@ export const addPoints = async (req: any, res: any) => {
       return res.status(404).json({ msg: "User not found" });
     }
 
-    // Only allow wallets in the list
-    if (!wallets.includes(user.wallet)) {
-      return res.status(403).json({ msg: "Not whitelisted" });
-    }
-
     // Check lastMinedDate (assume it's a Date or null)
     const now = new Date();
     if (user.lastMinedDate) {
