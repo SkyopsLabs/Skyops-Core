@@ -5,7 +5,8 @@ const Schema = mongoose.Schema;
 const pointsHistorySchema = new Schema({
   date: { type: String, required: true },
   type: { type: String, required: true }, // e.g., "earned", "spent", "bonus"
-  points: { type: Number, required: true },
+  points: { type: Number, required: false },
+  tokens: { type: Number, required: false },
 });
 const postSchema = new Schema({
   link: { type: String, required: true },
